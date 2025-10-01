@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import type { ColumnValues } from '../../features/tablesSlice';
 import { Button, Container, Menu, MenuItem, AddButton, MenuInput } from './tokens';
+import type { ColumnValues } from '../../features/tablesSlice';
 import { Select } from '../Select';
 
 const select = ['Country', 'City', 'Street', 'Home'];

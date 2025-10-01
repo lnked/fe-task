@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { Input } from '../Input';
 import {
@@ -34,6 +34,8 @@ export const Table = ({
   isActionsTextVisible: boolean;
   dragHandle: React.ReactNode;
 }) => {
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const [gridData, setGridData] = useState<Map<string, string>>(
     new Map(data.map((item) => [getKey(item.x, item.y), item.value])),
   );
@@ -48,13 +50,19 @@ export const Table = ({
   };
 
   useEffect(() => {
-    onChange(
-      Array.from(gridData.entries()).map(([key, value]) => ({
-        x: key.split(',').map(Number)[0],
-        y: key.split(',').map(Number)[1],
-        value,
-      })),
-    );
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      onChange(
+        Array.from(gridData.entries()).map(([key, value]) => ({
+          x: key.split(',').map(Number)[0],
+          y: key.split(',').map(Number)[1],
+          value,
+        })),
+      );
+    }, 500);
   }, [gridData]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (

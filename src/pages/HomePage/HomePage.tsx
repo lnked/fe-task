@@ -1,4 +1,3 @@
-import { useSelector, useDispatch } from 'react-redux';
 import {
   DndContext,
   closestCenter,
@@ -15,7 +14,11 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useSelector, useDispatch } from 'react-redux';
 
+import { TableContainer, Content, Header, Row, DragHandle } from './tokens';
+import { dragHandleImage } from '../../assets';
+import { AddTableButton } from '../../components/AddTableButton';
 import { Table } from '../../components/Table';
 import {
   createTable,
@@ -26,8 +29,6 @@ import {
   selectTables,
   type Data,
 } from '../../features/tablesSlice';
-import { TableContainer, Content, Header, Row, DragHandle } from './tokens';
-import { AddTableButton } from '../../components/AddTableButton';
 
 const SortableTable = ({
   id,
@@ -65,7 +66,7 @@ const SortableTable = ({
         isActionsTextVisible={isActionsTextVisible}
         dragHandle={
           <DragHandle {...listeners} $isDragging={isDragging}>
-            ≡
+            <img src={dragHandleImage} alt="Drag handle" />
           </DragHandle>
         }
       />

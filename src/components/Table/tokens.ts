@@ -14,13 +14,12 @@ export const TableHeader = styled.div<{ $isActionsColumn: boolean }>`
 `;
 
 export const Title = styled.div`
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   font-size: 1.2rem;
   font-weight: 400;
   color: #ffffff50;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
   padding: 8px 0;
 `;
 
