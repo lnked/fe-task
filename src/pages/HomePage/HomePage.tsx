@@ -64,7 +64,7 @@ const SortableTable = ({
         onDelete={onDelete}
         isActionsTextVisible={isActionsTextVisible}
         dragHandle={
-          <DragHandle {...listeners} isDragging={isDragging}>
+          <DragHandle {...listeners} $isDragging={isDragging}>
             ≡
           </DragHandle>
         }
@@ -102,7 +102,7 @@ export const HomePage = () => {
     <div>
       <Header>
         <Row>
-          <AddTableButton onCreateTable={() => dispatch(createTable())} />
+          <AddTableButton onCreateTable={(columnValues) => dispatch(createTable(columnValues))} />
         </Row>
       </Header>
 

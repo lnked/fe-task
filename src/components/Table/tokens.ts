@@ -6,11 +6,11 @@ export const Container = styled.div`
   position: relative;
 `;
 
-export const TableHeader = styled.div<{ isActionsColumn: boolean }>`
+export const TableHeader = styled.div<{ $isActionsColumn: boolean }>`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: ${(props) => (props.isActionsColumn ? 'space-between' : 'flex-start')};
+  justify-content: ${(props) => (props.$isActionsColumn ? 'space-between' : 'flex-start')};
 `;
 
 export const Title = styled.div`
@@ -41,7 +41,7 @@ export const TableBase = styled.table`
     font-size: 1.2rem;
     background-color: #0a508b;
     border-color: #0a508b;
-    cursor: pointer;
+    user-select: none;
   }
 
   td {

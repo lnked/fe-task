@@ -3,9 +3,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 export type Data = { x: number; y: number; value: string };
 
+export type ColumnValues = { column1: string; column2: string; column3: string; column4: string };
+
 type TableItem = {
   id: string;
-  header: string[];
+  header: Array<ColumnValues[keyof ColumnValues]>;
   data: Data[];
 };
 
@@ -21,8 +23,12 @@ const tablesSlice = createSlice({
   name: 'tables',
   initialState,
   reducers: {
-    createTable: (state) => {
-      state.list.push({ id: uuidv4(), header: ['Name', 'Surname', 'Age', 'City'], data: [] as Data[] });
+    createTable: (state, action: PayloadAction<ColumnValues>) => {
+      state.list.push({
+        id: uuidv4(),
+        header: [action.payload.column1, action.payload.column2, action.payload.column3, action.payload.column4],
+        data: [] as Data[],
+      });
     },
     copyTable: (state, action: PayloadAction<{ id: string }>) => {
       const currentIndex = state.list.findIndex((item) => item.id === action.payload.id);

@@ -35,12 +35,12 @@ export const Row = styled.div`
   }
 `;
 
-export const DragHandle = styled.div<{ isDragging: boolean }>`
+export const DragHandle = styled.div<{ $isDragging: boolean }>`
   border: 0;
   color: #fff;
   padding: 4px 6px;
   text-align: center;
   font-size: 1.6rem;
   line-height: 1;
-  cursor: ${(props) => (props.isDragging ? 'grabbing' : 'grab')};
+  cursor: ${(props) => (props.$isDragging ? 'grabbing' : 'grab')};
 `;

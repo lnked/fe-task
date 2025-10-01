@@ -93,13 +93,3 @@ export const AddButton = styled.button`
   border-radius: 4px;
   background-color: #1493fe;
 `;
-
-export const MenuSelect = styled.select`
-  width: 100%;
-  height: 100%;
-  border: none;
-  padding: 14px;
-  background: none;
-  border-radius: 4px;
-  border: 1px solid #e6ecef;
-`;

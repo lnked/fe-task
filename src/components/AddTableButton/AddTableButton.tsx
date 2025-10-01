@@ -1,6 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { Button, Container, Menu, MenuItem, AddButton, MenuInput, MenuSelect } from './tokens';
+import type { ColumnValues } from '../../features/tablesSlice';
+import { Button, Container, Menu, MenuItem, AddButton, MenuInput } from './tokens';
+import { Select } from '../Select';
+
+const select = ['Country', 'City', 'Street', 'Home'];
 
 const columns = [
   {
@@ -20,13 +24,19 @@ const columns = [
   },
   {
     id: 'column4',
-    list: ['Country', 'City', 'Street', 'Home'],
+    list: select,
     onChange: () => console.log('Удалить'),
   },
 ];
 
-export const AddTableButton = ({ onCreateTable }: { onCreateTable: () => void }) => {
+export const AddTableButton = ({ onCreateTable }: { onCreateTable: (columnValues: ColumnValues) => void }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [columnValues, setColumnValues] = useState({
+    column1: '',
+    column2: '',
+    column3: '',
+    column4: select[0],
+  });
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -64,8 +74,21 @@ export const AddTableButton = ({ onCreateTable }: { onCreateTable: () => void })
     };
   }, [isOpen, closeMenu]);
 
-  const handleChange = (value: string) => {
-    console.log(value);
+  const handleChange = (value: string, id: string) => {
+    setColumnValues((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleCreateTable = () => {
+    onCreateTable(columnValues);
+
+    setColumnValues({
+      column1: '',
+      column2: '',
+      column3: '',
+      column4: select[0],
+    });
+
+    closeMenu();
   };
 
   return (
@@ -85,26 +108,21 @@ export const AddTableButton = ({ onCreateTable }: { onCreateTable: () => void })
         {columns.map((item) => (
           <MenuItem key={item.id}>
             {item.list ? (
-              <MenuSelect
-                value={item.label}
-                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => handleChange(e.target.value)}
-              >
-                {item.list.map((item) => (
-                  <option key={item} value={item}>
-                    {item}
-                  </option>
-                ))}
-              </MenuSelect>
+              <Select
+                value={columnValues[item.id as keyof typeof columnValues]}
+                onChange={(value) => handleChange(value, item.id)}
+                options={item.list}
+              />
             ) : (
               <MenuInput
                 placeholder={item.label}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e.target.value, item.id)}
               />
             )}
           </MenuItem>
         ))}
 
-        <AddButton onClick={onCreateTable}>Add</AddButton>
+        <AddButton onClick={handleCreateTable}>Add</AddButton>
       </Menu>
     </Container>
   );

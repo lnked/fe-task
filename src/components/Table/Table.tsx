@@ -66,7 +66,7 @@ export const Table = ({
           <tr>
             {header.map((item, index) => (
               <th key={`${item}-${index}`}>
-                <TableHeader isActionsColumn={index === header.length - 1}>
+                <TableHeader $isActionsColumn={index === header.length - 1}>
                   {index === 0 && dragHandle}
 
                   <Title>{item}</Title>
@@ -78,7 +78,7 @@ export const Table = ({
                         {isActionsTextVisible ? <span>Copy</span> : <VisuallyHidden>Copy</VisuallyHidden>}
                       </Button>
 
-                      <Button type="button" delete onClick={onDelete}>
+                      <Button type="button" onClick={onDelete}>
                         <StyledDeleteIcon aria-hidden />
                         {isActionsTextVisible ? <span>Delete</span> : <VisuallyHidden>Delete</VisuallyHidden>}
                       </Button>
