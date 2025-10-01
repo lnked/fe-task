@@ -92,4 +92,15 @@ export const AddButton = styled.button`
   border: none;
   border-radius: 4px;
   background-color: #1493fe;
+
+  &:disabled {
+    background-color: #1493fe66;
+    cursor: not-allowed;
+  }
+`;
+
+export const ErrorMessage = styled.div`
+  color: red;
+  font-size: 1rem;
+  margin-top: 4px;
 `;

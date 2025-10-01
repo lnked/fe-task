@@ -1,10 +1,12 @@
 import { Container, SelectBase, Arrow } from './tokens';
 
 export const Select = ({
+  name,
   value,
   options,
   onChange,
 }: {
+  name: string;
   value: string;
   options: string[];
   onChange: (value: string) => void;
@@ -17,8 +19,8 @@ export const Select = ({
     <Container>
       <Arrow />
 
-      <SelectBase value={value} onChange={handleChange}>
-        {options.map((option) => (
+      <SelectBase name={name} value={value} onChange={handleChange}>
+        {options?.map((option) => (
           <option key={option} value={option}>
             {option}
           </option>
