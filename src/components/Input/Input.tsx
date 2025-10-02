@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback } from 'react';
 
 import { InputBase } from './tokens';
 
@@ -10,13 +10,13 @@ type InputProps = {
   placeholder?: string;
 };
 
-export const Input = ({ value: initialValue, onChange, onFocus, onBlur, placeholder }: InputProps) => {
-  const [value, setValue] = useState(initialValue);
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
-    onChange(event.target.value);
-  };
+export const Input = ({ value, onChange, onFocus, onBlur, placeholder }: InputProps) => {
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      onChange(event.target.value);
+    },
+    [onChange],
+  );
 
   return (
     <InputBase

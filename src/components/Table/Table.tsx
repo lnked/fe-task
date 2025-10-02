@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { Input } from '../Input';
 import {
@@ -41,13 +41,16 @@ export const Table = ({
   );
   const [activeCell, setActiveCell] = useState<[number, number] | null>(null);
 
-  const handleChange = (x: number, y: number) => (value: string) => {
-    setGridData((prev) => {
-      const newData = new Map(prev);
-      newData.set(getKey(x, y), value);
-      return newData;
-    });
-  };
+  const handleChange = useCallback(
+    (x: number, y: number) => (value: string) => {
+      setGridData((prev) => {
+        const newData = new Map(prev);
+        newData.set(getKey(x, y), value);
+        return newData;
+      });
+    },
+    [],
+  );
 
   useEffect(() => {
     if (timeoutRef.current) {

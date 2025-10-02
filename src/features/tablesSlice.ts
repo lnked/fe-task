@@ -3,12 +3,17 @@ import { v4 as uuidv4 } from 'uuid';
 
 export type Data = { x: number; y: number; value: string };
 
-export type ColumnValues = { column1: string; column2: string; column3: string; column4: string };
+export type ColumnValues = {
+  column1: string;
+  column2: string;
+  column3: string;
+  column4: string;
+};
 
 type TableItem = {
   id: string;
-  header: Array<ColumnValues[keyof ColumnValues]>;
   data: Data[];
+  header: string[];
 };
 
 type TablesState = {
@@ -24,30 +29,54 @@ const tablesSlice = createSlice({
   initialState,
   reducers: {
     createTable: (state, action: PayloadAction<ColumnValues>) => {
+      const { column1, column2, column3, column4 } = action.payload;
+
       state.list.push({
         id: uuidv4(),
-        header: [action.payload.column1, action.payload.column2, action.payload.column3, action.payload.column4],
-        data: [] as Data[],
+        header: [column1, column2, column3, column4],
+        data: [],
       });
     },
-    copyTable: (state, action: PayloadAction<{ id: string }>) => {
-      const currentIndex = state.list.findIndex((item) => item.id === action.payload.id);
-      const table = state.list[currentIndex];
 
-      state.list.splice(currentIndex + 1, 0, { id: uuidv4(), header: table?.header || [], data: table?.data || [] });
+    copyTable: (state, action: PayloadAction<{ id: string }>) => {
+      const table = state.list.find((item) => item.id === action.payload.id);
+
+      if (!table) return;
+
+      const clonedTable: TableItem = {
+        id: uuidv4(),
+        header: [...table.header],
+        data: table.data.map((d) => ({ ...d })),
+      };
+
+      const index = state.list.findIndex((item) => item.id === action.payload.id);
+
+      state.list.splice(index + 1, 0, clonedTable);
     },
+
     changeData: (state, action: PayloadAction<{ id: string; data: Data[] }>) => {
-      state.list = state.list.map((item) =>
-        item.id === action.payload.id ? { ...item, data: action.payload.data } : item,
-      );
+      const { id, data } = action.payload;
+
+      const table = state.list.find((item) => item.id === id);
+
+      if (table) {
+        table.data = data;
+      }
     },
+
     removeTableById: (state, action: PayloadAction<string>) => {
       state.list = state.list.filter((item) => item.id !== action.payload);
     },
-    moveTable: (state, action: PayloadAction<{ oldIndex: number; newIndex: number }>) => {
-      const [movedElement] = state.list.splice(action.payload.oldIndex, 1);
 
-      state.list.splice(action.payload.newIndex, 0, movedElement);
+    moveTable: (state, action: PayloadAction<{ oldIndex: number; newIndex: number }>) => {
+      const { oldIndex, newIndex } = action.payload;
+
+      if (oldIndex < 0 || newIndex < 0 || oldIndex >= state.list.length || newIndex >= state.list.length) {
+        return;
+      }
+
+      const [movedElement] = state.list.splice(oldIndex, 1);
+      state.list.splice(newIndex, 0, movedElement);
     },
   },
 });

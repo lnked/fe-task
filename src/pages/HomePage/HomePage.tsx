@@ -14,6 +14,7 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { TableContainer, Content, Header, Row, DragHandle } from './tokens';
@@ -86,18 +87,21 @@ export const HomePage = () => {
     }),
   );
 
-  const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event;
+  const handleDragEnd = useCallback(
+    (event: DragEndEvent) => {
+      const { active, over } = event;
 
-    if (over && active.id !== over.id) {
-      const activeId = String(active.id);
-      const overId = String(over.id);
-      const oldIndex = tables.findIndex((item) => item.id === activeId);
-      const newIndex = tables.findIndex((item) => item.id === overId);
+      if (over && active.id !== over.id) {
+        const activeId = String(active.id);
+        const overId = String(over.id);
+        const oldIndex = tables.findIndex((item) => item.id === activeId);
+        const newIndex = tables.findIndex((item) => item.id === overId);
 
-      dispatch(moveTable({ oldIndex, newIndex }));
-    }
-  };
+        dispatch(moveTable({ oldIndex, newIndex }));
+      }
+    },
+    [tables, dispatch],
+  );
 
   return (
     <div>

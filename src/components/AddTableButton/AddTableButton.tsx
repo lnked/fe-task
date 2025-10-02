@@ -14,6 +14,14 @@ export const AddTableButton = ({ onCreateTable }: { onCreateTable: (columnValues
   const closeMenu = useCallback(() => setIsOpen(false), []);
   const handleToggle = useCallback(() => setIsOpen((prev) => !prev), []);
 
+  const handleSubmit = useCallback(
+    (values: ColumnValues) => {
+      onCreateTable(values);
+      closeMenu();
+    },
+    [onCreateTable, closeMenu],
+  );
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -44,14 +52,6 @@ export const AddTableButton = ({ onCreateTable }: { onCreateTable: (columnValues
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, closeMenu]);
-
-  const handleSubmit = useCallback(
-    (values: ColumnValues) => {
-      onCreateTable(values);
-      closeMenu();
-    },
-    [onCreateTable, closeMenu],
-  );
 
   return (
     <Container>

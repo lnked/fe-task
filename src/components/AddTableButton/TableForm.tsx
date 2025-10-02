@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Form, Field, type FieldRenderProps, type FormRenderProps } from 'react-final-form';
 
 import { isTextField } from './helpers';
@@ -16,19 +16,19 @@ type InputFieldOwnProps = {
 type InputFieldProps = FieldRenderProps<string, HTMLElement> & InputFieldOwnProps;
 
 const InputField = ({ input, meta, label }: InputFieldProps) => (
-  <div>
+  <>
     <MenuInput {...input} placeholder={label} />
     {meta.touched && meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
-  </div>
+  </>
 );
 
 type SelectFieldProps = FieldRenderProps<string, HTMLElement> & InputFieldOwnProps;
 
 const SelectField = ({ input, list, meta }: SelectFieldProps) => (
-  <div style={{ marginBottom: '1rem' }}>
+  <>
     <Select {...input} options={list} />
     {meta.touched && meta.error && <ErrorMessage>{meta.error}</ErrorMessage>}
-  </div>
+  </>
 );
 
 type TableFormProps = {
@@ -47,25 +47,31 @@ export const TableForm = ({ fields, onSubmit }: TableFormProps) => {
     [fields],
   );
 
-  const validate = (values: ColumnValues) => {
-    const errors: Record<string, string> = {};
+  const validate = useCallback(
+    (values: ColumnValues) => {
+      const errors: Record<string, string> = {};
 
-    fields.forEach((field: FieldType) => {
-      if (field.required && !values[field.id as keyof ColumnValues]) {
-        errors[field.id] = 'Обязательное поле';
-      }
-    });
+      fields.forEach((field: FieldType) => {
+        if (field.required && !values[field.id as keyof ColumnValues]) {
+          errors[field.id] = 'Обязательное поле';
+        }
+      });
 
-    return errors;
-  };
+      return errors;
+    },
+    [fields],
+  );
 
-  const handleSubmit = (values: ColumnValues, form: FormRenderProps<ColumnValues>['form']) => {
-    onSubmit(values);
+  const handleSubmit = useCallback(
+    (values: ColumnValues, form: FormRenderProps<ColumnValues>['form']) => {
+      onSubmit(values);
 
-    setTimeout(() => {
-      form.reset();
-    }, 1000);
-  };
+      setTimeout(() => {
+        form.reset();
+      }, 1000);
+    },
+    [onSubmit],
+  );
 
   return (
     <Form

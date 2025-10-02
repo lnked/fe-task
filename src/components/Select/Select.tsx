@@ -1,19 +1,21 @@
+import { memo, useCallback } from 'react';
+
 import { Container, SelectBase, Arrow } from './tokens';
 
-export const Select = ({
-  name,
-  value,
-  options,
-  onChange,
-}: {
+type SelectProps = {
   name: string;
   value: string;
   options: string[];
   onChange: (value: string) => void;
-}) => {
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onChange(event.target.value);
-  };
+};
+
+const SelectComponent = ({ name, value, options, onChange }: SelectProps) => {
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      onChange(event.target.value);
+    },
+    [onChange],
+  );
 
   return (
     <Container>
@@ -24,8 +26,10 @@ export const Select = ({
           <option key={option} value={option}>
             {option}
           </option>
-        ))}
+        )) ?? <option value="">No options</option>}
       </SelectBase>
     </Container>
   );
 };
+
+export const Select = memo(SelectComponent);
